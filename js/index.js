@@ -24,6 +24,16 @@ var Demo = (function() {
       return "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + "_" + size + ".jpg";
     },
 
+    api: function() {
+      jsonp(Flickr.endpoint +
+        '?method=' + Flickr.method +
+        '&api_key=' + Flickr.key +
+        '&photoset_id=' + Flickr.photoset +
+        '&jsoncallback=' + Flickr.callback_name +
+        '&format=json'
+      );
+    },
+
     /**
       * Flickr API callback
       *
@@ -82,15 +92,8 @@ var Demo = (function() {
       container: opts.container
     };
 
-    jsonp(Flickr.endpoint +
-      '?method=' + Flickr.method +
-      '&api_key=' + Flickr.key +
-      '&photoset_id=' + Flickr.photoset +
-      '&jsoncallback=' + Flickr.callback_name +
-      '&format=json'
-    );
+    Flickr.api();
 
-    // Init Eon
     Eon.init();
   }
 
