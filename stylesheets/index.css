@@ -12,9 +12,22 @@ body {
   margin: auto;
   width: 900px;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .demo-images-list > li {
-  display: inline-block;
   margin: 10px;
+  width: 150px;
+  height: 150px;
+}
+
+.demo-images-list > li > a {
+  display: block;
+  opacity: 1;
+}
+
+.demo-images-list > li > a:hover {
+  opacity: 0.9;
 }

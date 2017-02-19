@@ -14,7 +14,23 @@
 
     <h1 class="demo-page-title">Eon Lightbox Demo</h1>
 
-    <ul id="images-list" class="demo-images-list"></ul>
+    <ul id="images-list" class="demo-images-list" data-eon-container="flickr"></ul>
+
+    <div id="eon-lightbox" class="eon-lightbox">
+      <div class="eon-lightbox-dialog">
+        <a class="eon-lightbox-left">
+          <img class="eon-lightbox-image-prev" data-eon-lightbox-action="prev" />
+        </a>
+        <div class="eon-lightbox-body">
+          <a class="eon-lightbox-close" data-eon-lightbox-action="close">&times;</a>
+          <img class="eon-lightbox-image" data-eon-lightbox-action="next" />
+          <div class="eon-lightbox-title"></div>
+        </div>
+        <a class="eon-lightbox-right">
+          <img class="eon-lightbox-image-next" data-eon-lightbox-action="next" />
+        </a>
+      </div>
+    </div>
 
     <script src="js/eon.js"></script>
     <script src="js/index.js"></script>

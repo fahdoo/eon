@@ -1,0 +1,88 @@
+.eon-lightbox {
+  font-family: Helvetica, Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  display: none;
+}
+
+.eon-lightbox.active {
+  display: block;
+}
+
+.eon-lightbox a {
+  cursor: pointer;
+}
+
+.eon-lightbox-dialog {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  padding: 10px;
+}
+
+.eon-lightbox-left {
+  text-align: right;
+}
+
+.eon-lightbox-left, .eon-lightbox-right {
+  flex-grow: 1;
+}
+
+.eon-lightbox-body {
+  width: auto;
+  text-align: center;
+  position: relative;
+  padding: 40px 0;
+}
+
+.eon-lightbox-image {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+}
+
+.eon-lightbox-image, .eon-lightbox-image-prev, .eon-lightbox-image-next {
+  max-width: 100%;
+  visibility: hidden;
+}
+
+.eon-lightbox-image-prev:hover, .eon-lightbox-image-next:hover {
+  opacity: 0.9;
+}
+
+.eon-lightbox-image.active, .eon-lightbox-image-prev.active, .eon-lightbox-image-next.active {
+  visibility: visible;
+}
+
+.eon-lightbox-title {
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: center;
+  padding-top: 3px;
+}
+
+.eon-lightbox-close {
+  position: absolute;
+  display: none;
+  right: 0;
+  top: 40px;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  opacity: 0.75;
+  background-color: #050505;
+}
+
+.eon-lightbox-body:hover .eon-lightbox-close {
+  display: block
+}
+
+.eon-lightbox-close:hover {
+  opacity: 1;
+}

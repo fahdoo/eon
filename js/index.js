@@ -8,10 +8,10 @@ var Demo = (function() {
   // Define Flickr API configuration
   var Flickr = {
     endpoint: "https://api.flickr.com/services/rest/",
-    key: "221dfbb54c3220d5e802c65e73be0f59",
+    key: "c31e5c6e1292ad1ebb2dec72263dc6ed",
     photoset: "72157626579923453",
     method: "flickr.photosets.getPhotos",
-    // Define custom callback since its not attach to global window object
+    // Define custom callback since its not attached to global window object
     callback_name: "Demo.Flickr.jsonFlickrApi",
 
     /**
@@ -68,9 +68,29 @@ var Demo = (function() {
     *
     */
   function renderPhoto(photoData, photoHTML) {
+    var photoAnchor = document.createElement('a');
     var photoIMG = document.createElement('img');
-    photoIMG.src = Flickr.photoPath(photoData, 'm');
-    photoHTML.appendChild(photoIMG);
+
+    var thumbnailPath = Flickr.photoPath(photoData, 'q');
+    var imagePath = Flickr.photoPath(photoData, 'c');
+
+    preloadImage(imagePath);
+
+    photoAnchor.href = imagePath;
+    photoIMG.src = thumbnailPath;
+    photoIMG.classList.add('eon-item');
+    photoIMG.setAttribute('data-eon-lightbox-action', 'open');
+    photoIMG.setAttribute('data-eon-title', photoData.title);
+    photoIMG.setAttribute('data-eon-thumbnail', thumbnailPath);
+    photoIMG.setAttribute('data-eon-image', imagePath);
+
+    photoAnchor.appendChild(photoIMG);
+    photoHTML.appendChild(photoAnchor);
+  }
+
+  function preloadImage(path) {
+    img = new Image();
+    img.src = path;
   }
 
   /**
@@ -94,7 +114,9 @@ var Demo = (function() {
 
     Flickr.api();
 
-    Eon.init();
+    Eon.init({
+      lightBoxId: '#eon-lightbox'
+    });
   }
 
   /**
@@ -112,6 +134,6 @@ var Demo = (function() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
   Demo.init({
-    container: document.getElementById("images-list")
+    container: document.querySelector("#images-list")
   });
 });
