@@ -3,7 +3,6 @@
 // Animations/transitions
 // Option to disable background-click escape
 // Responsive
-// Check if options exist
 
 /**
   * Eon Lightbox Library
@@ -11,15 +10,17 @@
   */
 var Eon = (function() {
   var lightbox;
+  var lightBoxId;
   var currentEl;
-  var options = {};
 
-  function init(opts) {
-    options = {
-      lightBoxId: opts.lightBoxId
-    };
+  function init(options) {
+    lightBoxId = options.lightBoxId;
 
-    lightBox = document.querySelector(options.lightBoxId);
+    if (typeof lightBoxId == "undefined") {
+      alert("You forgot to define a lightBoxId (e.g. '#images-list') for Eon.init()");
+    }
+
+    lightBox = document.querySelector(lightBoxId);
 
     var containers = document.querySelectorAll('[data-eon-container]');
 

@@ -3,63 +3,68 @@
   *
   */
 var Demo = (function() {
-  var options = {};
+  var container;
 
-  // Define Flickr API configuration
-  var Flickr = {
-    endpoint: "https://api.flickr.com/services/rest/",
-    key: "c31e5c6e1292ad1ebb2dec72263dc6ed",
-    photoset: "72157626579923453",
-    method: "flickr.photosets.getPhotos",
-    // Define custom callback since its not attached to global window object
-    callback_name: "Demo.Flickr.jsonFlickrApi",
+  /**
+    * Initialize demo
+    *
+    */
+  function init(options) {
+    container = options.container;
 
-    /**
-      * Define image src paths based on API photo data and:
-      *   https://www.flickr.com/services/api/misc.urls.html
-      * @data
-      * @size
-      */
-    photoPath: function(data, size) {
-      return "https://farm" + data.farm + ".staticflickr.com/" + data.server + "/" + data.id + "_" + data.secret + "_" + size + ".jpg";
-    },
-
-    api: function() {
-      jsonp(Flickr.endpoint +
-        '?method=' + Flickr.method +
-        '&api_key=' + Flickr.key +
-        '&photoset_id=' + Flickr.photoset +
-        '&jsoncallback=' + Flickr.callback_name +
-        '&format=json'
-      );
-    },
-
-    /**
-      * Flickr API callback
-      *
-      */
-    jsonFlickrApi: function(data) {
-      if (data.stat != "ok") {
-        console.error(data);
-        alert("Error " + data.code + ': ' + data.message);
-      } else if (typeof data.photoset != "undefined" && typeof data.photoset.photo != "undefined") {
-        renderPhotos(data.photoset.photo);
-      } else {
-        console.error(data);
-        alert("Error: an unknown problem occured, please try again.");
-      }
+    if (typeof container == "undefined") {
+      alert("You forgot to define a container for Demo.init()");
     }
-  };
+
+    PhotoAPI.init({
+      apiSource: 'flickr',
+      callbackFn: renderPhotos,
+      getAPIPath: function(jsonCallbackName) {
+        var endpoint = "https://api.flickr.com/services/rest/";
+        var key = "c31e5c6e1292ad1ebb2dec72263dc6ed";
+        var photoset = "72157626579923453";
+        var method = "flickr.photosets.getPhotos";
+        return endpoint +
+          '?method=' + method +
+          '&api_key=' + key +
+          '&photoset_id=' + photoset +
+          '&jsoncallback=' + jsonCallbackName +
+          '&format=json';
+      },
+      jsonAPICallbackFn: function(data, apiSource, callbackFn) {
+        if (data.stat != "ok") {
+          console.error(data);
+          alert("Error " + data.code + ': ' + data.message);
+        } else if (typeof data.photoset != "undefined" && typeof data.photoset.photo != "undefined") {
+          callbackFn(apiSource, data.photoset);
+        } else {
+          console.error(data);
+          alert("Error: an unknown problem occured, please try again.");
+        }
+      }
+    });
+
+    Eon.init({
+      lightBoxId: '#eon-lightbox'
+    });
+  }
 
   /**
     * Appends photos to pre-defined container
     *
     */
-  function renderPhotos(photosData) {
-    for (var i = 0; i < photosData.length; i++) {
+  function renderPhotos(source, photosData) {
+    var photos;
+    switch (source) {
+      case 'flickr':
+        photos = photosData.photo;
+        break;
+    }
+
+    for (var i = 0; i < photos.length; i++) {
       var photoHTML = document.createElement('li');
-      options.container.appendChild(photoHTML);
-      renderPhoto(photosData[i], photoHTML);
+      container.appendChild(photoHTML);
+      renderPhoto(photos[i], photoHTML);
     }
   }
 
@@ -71,8 +76,8 @@ var Demo = (function() {
     var photoAnchor = document.createElement('a');
     var photoIMG = document.createElement('img');
 
-    var thumbnailPath = Flickr.photoPath(photoData, 'q');
-    var imagePath = Flickr.photoPath(photoData, 'c');
+    var thumbnailPath = PhotoAPI.getPhotoPath(photoData, 'q');
+    var imagePath = PhotoAPI.getPhotoPath(photoData, 'c');
 
     preloadImage(imagePath);
 
@@ -95,41 +100,11 @@ var Demo = (function() {
   }
 
   /**
-    * Utility function to load external APIs
-    *
-    */
-  function jsonp(path) {
-    var script = document.createElement('script');
-    script.src = path;
-    document.head.appendChild(script);
-  }
-
-  /**
-    * Initialize demo
-    *
-    */
-  function init(opts) {
-    options = {
-      container: opts.container
-    };
-
-    Flickr.api();
-
-    Eon.init({
-      lightBoxId: '#eon-lightbox'
-    });
-  }
-
-  /**
     * Reveal public properties/functions
     *
     */
   return {
-    init: init,
-    // Expose callback for Flickr Api
-    Flickr: {
-      jsonFlickrApi: Flickr.jsonFlickrApi
-    }
+    init: init
   };
 })();
 
