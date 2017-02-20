@@ -72,6 +72,14 @@ a.demo-image:hover img {
   color: #be8212;
 }
 
+.btn-more:after {
+  content: 'More';
+}
+
+.btn-more[disabled]:after {
+    content: 'Loading...';
+}
+
 .btn-more:hover {
   background-color: #eec984;
 }
