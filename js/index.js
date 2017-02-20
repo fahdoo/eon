@@ -8,10 +8,15 @@ var Demo = (function() {
   var perPage = 20;
   var moreBtn = document.querySelector('#btn-more');
 
+  /**
+    * API params based on flickr; could potentially be used/extended for the other APIs
+    *
+    */
   var apiParams = {
+    // Define the api provider name
     apiSource: 'flickr',
-    callbackFn: renderPhotos,
-    getAPIPath: function(jsonCallbackName) {
+    // Generate the API call path
+    getAPIPath: function(apiCallbackName) {
       var endpoint = "https://api.flickr.com/services/rest/";
       var key = "c31e5c6e1292ad1ebb2dec72263dc6ed";
       var photoset = "72157631282848908";
@@ -22,15 +27,16 @@ var Demo = (function() {
         '&photoset_id=' + photoset +
         '&per_page=' + perPage +
         '&page=' + page +
-        '&jsoncallback=' + jsonCallbackName +
+        '&jsoncallback=' + apiCallbackName +
         '&format=json';
     },
-    jsonAPICallbackFn: function(data, apiSource, callbackFn) {
+    // The callback that the API returns data and error messages to
+    renderCallbackFn: function(data, callback) {
       if (data.stat != "ok") {
         console.error(data);
         alert("Error " + data.code + ': ' + data.message);
       } else if (typeof data.photoset != "undefined" && typeof data.photoset.photo != "undefined") {
-        callbackFn(apiSource, data.photoset);
+        renderPhotos(data.photoset.photo, data.photoset.total);
       } else {
         console.error(data);
         alert("Error: an unknown problem occured, please try again.");
@@ -43,6 +49,7 @@ var Demo = (function() {
     *
     */
   function init(options) {
+    // Element id that contains image thumbnails
     container = options.container;
 
     if (typeof container == "undefined") {
@@ -58,6 +65,10 @@ var Demo = (function() {
     });
   }
 
+  /**
+    * Increments page and then calls PhotoAPI to load more photos
+    *
+    */
   function loreMore() {
     moreBtn.disabled = true;
     page++;
@@ -68,16 +79,7 @@ var Demo = (function() {
     * Appends photos to pre-defined container
     *
     */
-  function renderPhotos(source, photosData) {
-    var photos;
-    var total;
-    switch (source) {
-      case 'flickr':
-        photos = photosData.photo;
-        total = photosData.total;
-        break;
-    }
-
+  function renderPhotos(photos, total) {
     // Hide 'more' button if no more photos to return
     if (total <= page * perPage) {
       moreBtn.classList.add('hide');
@@ -117,15 +119,16 @@ var Demo = (function() {
     photoHTML.appendChild(photoAnchor);
   }
 
+  /**
+    * This will preload an image in the background,
+    * useful for pre-fetching high-res images
+    *
+    */
   function preloadImage(path) {
     img = new Image();
     img.src = path;
   }
 
-  /**
-    * Reveal public properties/functions
-    *
-    */
   return {
     init: init
   };

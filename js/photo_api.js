@@ -1,57 +1,59 @@
 // Define Photo API configuration
 var PhotoAPI = (function() {
   // Define custom json callback since its not attached to global window object
-  var jsonCallbackName = "PhotoAPI.jsonAPI";
+  var apiCallbackName = "PhotoAPI.apiCallbackFn";
   var apiSource;
   var getAPIPath;
-  var callbackFn;
-  var jsonAPICallbackFn;
-  var busy = false;
+  var renderCallbackFn;
 
+  /**
+    * Initialize PhotoAPI
+    *
+    */
   function init(options) {
+    // Name of API provider, e.g 'flickr'
     apiSource = options.apiSource;
+    // Function that generates the API path
     getAPIPath = options.getAPIPath;
-    callbackFn = options.callbackFn;
-    jsonAPICallbackFn = options.jsonAPICallbackFn;
+    // Function that will render the photos after getting data from API
+    renderCallbackFn = options.renderCallbackFn;
 
     if (typeof apiSource !== "string") {
       alert("You forgot to define an apiSource string param for PhotoAPI.init()");
-    }
-
-    if (typeof callbackFn !== "function") {
-      alert("You forgot to define a callbackFn function param for PhotoAPI.init()");
     }
 
     if (typeof getAPIPath !== "function") {
       alert("You forgot to define an getAPIPath function param for PhotoAPI.init()");
     }
 
-    if (typeof jsonAPICallbackFn !== "function") {
-      alert("You forgot to define an jsonAPICallbackFn function param for PhotoAPI.init()");
+    if (typeof renderCallbackFn !== "function") {
+      alert("You forgot to define an renderCallbackFn function param for PhotoAPI.init()");
     }
 
     load();
   }
 
+  /**
+    * Calls the API path via jsonp
+    *
+    */
   function load() {
-    busy = true;
-    jsonp(getAPIPath(jsonCallbackName));
+    jsonp(getAPIPath(apiCallbackName));
   }
 
   /**
-    * API callback
+    * Publicly exposed callback wraps around the render callback
     *
     */
-  function jsonAPI(data) {
-    jsonAPICallbackFn(data, apiSource, callbackFn);
-    busy = false;
+  function apiCallbackFn(data) {
+    renderCallbackFn(data);
   }
 
   /**
     * Define image src paths based on API photo data
     *
-    * @data
-    * @size
+    * data: photo json data
+    * size: size of photo to display
     */
   function getPhotoPath(data, size) {
     var path;
@@ -66,7 +68,7 @@ var PhotoAPI = (function() {
 
   /**
     * Utility function to load external APIs
-    *
+    * Source: http://stackoverflow.com/questions/6132796/how-to-make-a-jsonp-request-from-javascript-without-jquery
     */
   function jsonp(path) {
     var script = document.createElement('script');
@@ -74,11 +76,10 @@ var PhotoAPI = (function() {
     document.head.appendChild(script);
   }
 
-
   return {
     init: init,
     load: load,
-    jsonAPI: jsonAPI,
+    apiCallbackFn: apiCallbackFn,
     getPhotoPath: getPhotoPath
   };
 })();
