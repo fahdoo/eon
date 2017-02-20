@@ -77,8 +77,9 @@ var Demo = (function() {
     preloadImage(imagePath);
 
     photoAnchor.href = imagePath;
+    photoAnchor.classList.add('demo-image');
+
     photoIMG.src = thumbnailPath;
-    photoIMG.classList.add('eon-item');
     photoIMG.setAttribute('data-eon-lightbox-action', 'open');
     photoIMG.setAttribute('data-eon-title', photoData.title);
     photoIMG.setAttribute('data-eon-thumbnail', thumbnailPath);

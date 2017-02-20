@@ -76,11 +76,12 @@
   line-height: 40px;
   font-size: 18px;
   opacity: 0.75;
-  background-color: #050505;
+  background-color: #e6461a;
+  border-bottom-left-radius: 3px;
 }
 
 .eon-lightbox-body:hover .eon-lightbox-close {
-  display: block
+  display: block;
 }
 
 .eon-lightbox-close:hover {

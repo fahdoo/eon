@@ -1,20 +1,33 @@
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f5eddf;
+  margin: 0;
+  padding: 0;
+}
+
+.demo-header {
+  color: #F6E4C4;
+  background-color: #e6461a;
+  border-bottom: 1px solid #d74118;
 }
 
 .demo-page-title {
+  margin: 0;
   text-align: center;
+  font-weight: 200;
+  line-height: 100px;
+}
+
+.demo-main {
+  padding:  50px;
 }
 
 .demo-images-list {
-  list-style: none;
-  padding: 0;
-  margin: auto;
-  width: 900px;
-  text-align: center;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .demo-images-list > li {
@@ -23,11 +36,19 @@ body {
   height: 150px;
 }
 
-.demo-images-list > li > a {
+a.demo-image {
   display: block;
   opacity: 1;
 }
 
-.demo-images-list > li > a:hover {
+a.demo-image:hover {
   opacity: 0.9;
+}
+
+a.demo-image img {
+  border-radius: 2px;
+}
+
+a.demo-image:hover img {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
