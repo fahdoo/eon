@@ -5,7 +5,7 @@
   * - Responsive design
   * - Keybindings
   */
-  
+
 /**
   * Eon Lightbox Library
   *
@@ -109,31 +109,52 @@ var Eon = (function() {
 
     // Set Current
     currentEl = e.target;
-    var lightBoxCurrentEl = lightBox.querySelector('.eon-lightbox-image');
-    setImageSrc(lightBoxCurrentEl, currentEl.getAttribute('data-eon-image'));
-
-    // Set current title
-    lightBox.querySelector('.eon-lightbox-title').innerHTML = currentEl.getAttribute('data-eon-title');
+    setCurrent();
 
     // Set Prev
-    var prevEl = getPrevEl();
+    setPrev();
+
+    // Set Next
+    setNext();
+
+    // Make lightbox visible
+    lightBox.classList.add('active');
+  }
+
+  function setCurrent() {
+    var el = getCurrentEl();
+    var lightBoxCurrentEl = lightBox.querySelector('.eon-lightbox-image');
+    setImageSrc(lightBoxCurrentEl, el.getAttribute('data-eon-image'));
+
+    // Set current title
+    lightBox.querySelector('.eon-lightbox-title').innerHTML = el.getAttribute('data-eon-title');
+  }
+
+  function setPrev() {
+    var el = getPrevEl();
     var lightBoxPrevEl = lightBox.querySelector('.eon-lightbox-image-prev');
-    if (prevEl !== null) {
-      setImageSrc(lightBoxPrevEl, prevEl.getAttribute('data-eon-thumbnail'));
+    if (el !== null) {
+      setImageSrc(lightBoxPrevEl, el.getAttribute('data-eon-thumbnail'));
     } else {
       lightBoxPrevEl.classList.remove('loaded');
     }
+  }
 
-    // Set Next
-    var nextEl = getNextEl();
+  function setNext() {
+    var el = getNextEl();
     var lightBoxNextEl = lightBox.querySelector('.eon-lightbox-image-next');
-    if (nextEl !== null) {
-      setImageSrc(lightBoxNextEl, nextEl.getAttribute('data-eon-thumbnail'));
+    if (el !== null) {
+      setImageSrc(lightBoxNextEl, el.getAttribute('data-eon-thumbnail'));
     } else {
       lightBoxNextEl.classList.remove('loaded');
     }
+  }
 
-    lightBox.classList.add('active');
+  /**
+    * Returns the current active thumbnail
+    */
+  function getCurrentEl() {
+    return currentEl;
   }
 
   /**
