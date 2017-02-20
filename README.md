@@ -1,4 +1,5 @@
 # Eon Lightbox
+View a demo of Eon Lightbox at https://fahdoo.github.io/eon/
 
 ## Setup
 Place the eon.css stylesheet in your html's head
