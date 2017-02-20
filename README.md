@@ -12,7 +12,9 @@ Place the eon.js script at the end of your html's body and before any custom scr
 ```
 
 
-## Thumbnails html
+## HTML setup
+
+### Thumbnails
 Your thumbnails should be nested in an element with data-eon-container attribute. 
 The thumbnail images themselves should have the following attributes: 
 - data-eon-lightbox-action="open" - open this in the lightbox
@@ -29,7 +31,7 @@ The thumbnail images themselves should have the following attributes:
     </ul>
 ```
 
-## Lightbox html
+### Lightbox
 Add the follow html for the lightbox modal:
 ```
     <div id="eon-lightbox" class="eon-lightbox">
@@ -47,4 +49,13 @@ Add the follow html for the lightbox modal:
         </a>
       </div>
     </div>
+```
+
+## Initialize library
+Initialize Eon by calling Eon.init and passing a lightBoxId in the options. The lightBoxId refers to the lightbox html element's id.
+
+```
+    Eon.init({
+      lightBoxId: '#eon-lightbox'
+    });
 ```
