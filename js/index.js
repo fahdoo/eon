@@ -4,6 +4,39 @@
   */
 var Demo = (function() {
   var container;
+  var page = 1;
+  var perPage = 20;
+  var moreBtn = document.querySelector('#btn-more');
+
+  var apiParams = {
+    apiSource: 'flickr',
+    callbackFn: renderPhotos,
+    getAPIPath: function(jsonCallbackName) {
+      var endpoint = "https://api.flickr.com/services/rest/";
+      var key = "c31e5c6e1292ad1ebb2dec72263dc6ed";
+      var photoset = "72157631282848908";
+      var method = "flickr.photosets.getPhotos";
+      return endpoint +
+        '?method=' + method +
+        '&api_key=' + key +
+        '&photoset_id=' + photoset +
+        '&per_page=' + perPage +
+        '&page=' + page +
+        '&jsoncallback=' + jsonCallbackName +
+        '&format=json';
+    },
+    jsonAPICallbackFn: function(data, apiSource, callbackFn) {
+      if (data.stat != "ok") {
+        console.error(data);
+        alert("Error " + data.code + ': ' + data.message);
+      } else if (typeof data.photoset != "undefined" && typeof data.photoset.photo != "undefined") {
+        callbackFn(apiSource, data.photoset);
+      } else {
+        console.error(data);
+        alert("Error: an unknown problem occured, please try again.");
+      }
+    }
+  };
 
   /**
     * Initialize demo
@@ -16,37 +49,19 @@ var Demo = (function() {
       alert("You forgot to define a container for Demo.init()");
     }
 
-    PhotoAPI.init({
-      apiSource: 'flickr',
-      callbackFn: renderPhotos,
-      getAPIPath: function(jsonCallbackName) {
-        var endpoint = "https://api.flickr.com/services/rest/";
-        var key = "c31e5c6e1292ad1ebb2dec72263dc6ed";
-        var photoset = "72157626579923453";
-        var method = "flickr.photosets.getPhotos";
-        return endpoint +
-          '?method=' + method +
-          '&api_key=' + key +
-          '&photoset_id=' + photoset +
-          '&jsoncallback=' + jsonCallbackName +
-          '&format=json';
-      },
-      jsonAPICallbackFn: function(data, apiSource, callbackFn) {
-        if (data.stat != "ok") {
-          console.error(data);
-          alert("Error " + data.code + ': ' + data.message);
-        } else if (typeof data.photoset != "undefined" && typeof data.photoset.photo != "undefined") {
-          callbackFn(apiSource, data.photoset);
-        } else {
-          console.error(data);
-          alert("Error: an unknown problem occured, please try again.");
-        }
-      }
-    });
+    moreBtn.addEventListener('click', loreMore);
+
+    PhotoAPI.init(apiParams);
 
     Eon.init({
       lightBoxId: '#eon-lightbox'
     });
+  }
+
+  function loreMore() {
+    moreBtn.disabled = true;
+    page++;
+    PhotoAPI.load();
   }
 
   /**
@@ -55,10 +70,17 @@ var Demo = (function() {
     */
   function renderPhotos(source, photosData) {
     var photos;
+    var total;
     switch (source) {
       case 'flickr':
         photos = photosData.photo;
+        total = photosData.total;
         break;
+    }
+
+    // Hide 'more' button if no more photos to return
+    if (total <= page * perPage) {
+      moreBtn.classList.add('hide');
     }
 
     for (var i = 0; i < photos.length; i++) {
@@ -66,6 +88,7 @@ var Demo = (function() {
       container.appendChild(photoHTML);
       renderPhoto(photos[i], photoHTML);
     }
+    moreBtn.disabled = false;
   }
 
   /**

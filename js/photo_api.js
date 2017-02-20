@@ -6,6 +6,7 @@ var PhotoAPI = (function() {
   var getAPIPath;
   var callbackFn;
   var jsonAPICallbackFn;
+  var busy = false;
 
   function init(options) {
     apiSource = options.apiSource;
@@ -29,6 +30,11 @@ var PhotoAPI = (function() {
       alert("You forgot to define an jsonAPICallbackFn function param for PhotoAPI.init()");
     }
 
+    load();
+  }
+
+  function load() {
+    busy = true;
     jsonp(getAPIPath(jsonCallbackName));
   }
 
@@ -38,6 +44,7 @@ var PhotoAPI = (function() {
     */
   function jsonAPI(data) {
     jsonAPICallbackFn(data, apiSource, callbackFn);
+    busy = false;
   }
 
   /**
@@ -70,6 +77,7 @@ var PhotoAPI = (function() {
 
   return {
     init: init,
+    load: load,
     jsonAPI: jsonAPI,
     getPhotoPath: getPhotoPath
   };

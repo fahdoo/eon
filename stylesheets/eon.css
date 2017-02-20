@@ -24,6 +24,14 @@
   justify-content: center;
   align-items: center;
   align-content: stretch;
+
+  /* Stretching this div to edges enables proper vertical centering */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
   padding: 10px;
 }
 
@@ -44,6 +52,9 @@
 
 .eon-lightbox-image {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+
+  /* TODO: This could be dynamic, based on window height */
+  max-height: 600px;
 }
 
 .eon-lightbox-image, .eon-lightbox-image-prev, .eon-lightbox-image-next {

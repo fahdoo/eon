@@ -1,8 +1,8 @@
 // TODO
 // Prevent body scrolling
 // Animations/transitions
-// Option to disable background-click escape
 // Responsive
+// Keybindings
 
 /**
   * Eon Lightbox Library
@@ -48,7 +48,11 @@ var Eon = (function() {
         next(e);
         break;
       default:
-        close(e);
+        // TODO: We could enable dismiss on background click,
+        // or better create an option to enable or disable this
+        // Because image widths aren't fixed, its easy to accidently
+        // escape the lightbox
+        // close(e);
         break;
     }
   }
@@ -77,12 +81,14 @@ var Eon = (function() {
 
     // Set Current
     currentEl = e.target;
+    currentEl.classList.remove('active');
     setImageSrc('.eon-lightbox-image', currentEl.getAttribute('data-eon-image'));
     lightBox.querySelector('.eon-lightbox-title').innerHTML = currentEl.getAttribute('data-eon-title');
 
     // Set Prev
     var prevEl = getPrevEl();
     if (prevEl !== null) {
+      prevEl.classList.remove('active');
       setImageSrc('.eon-lightbox-image-prev', prevEl.getAttribute('data-eon-thumbnail'));
     } else {
       lightBox.querySelector('.eon-lightbox-image-prev').classList.remove('active');
@@ -91,6 +97,7 @@ var Eon = (function() {
     // Set Next
     var nextEl = getNextEl();
     if (nextEl !== null) {
+      nextEl.classList.remove('active');
       setImageSrc('.eon-lightbox-image-next', nextEl.getAttribute('data-eon-thumbnail'));
     } else {
       lightBox.querySelector('.eon-lightbox-image-next').classList.remove('active');
@@ -119,6 +126,7 @@ var Eon = (function() {
     var imageEl = lightBox.querySelector(selector);
     imageEl.src = path;
     imageEl.classList.add('active');
+    return imageEl;
   }
 
   // Re-route to dispatcher if there is an action
